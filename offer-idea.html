@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!--
+  ___  ___ _ __ _ __ | | ___  _  _(_) |_ _   _
+ / _ \/ _ \ '__| '_ \| |/ _ \| |/ / | __| | | |
+|  __/  __/ |  | |_) | |  __/|   <| | |_| |_| |
+ \___|\___||_|  | .__/|_|\___||_|\_\_|\__|\__, |
+                |_|                        |___/
+  Created with Perplexity Computer
+  https://www.perplexity.ai/computer
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Предложить свою идею — заказать акварель у Джульджи</title>
+  <meta name="description" content="Закажите авторскую акварель по вашей идее: цветок, птица, пейзаж — любой сюжет. Художник Джульджи напишет картину в единственном экземпляре.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Заказать авторскую акварель — Джульджи">
+  <meta property="og:description" content="Расскажите художнику свою идею — получите уникальную акварель ручной работы.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <style>
+    .offer-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .offer-main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: var(--space-16) var(--space-6) var(--space-12);
+    }
+
+    .offer-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-12) var(--space-10);
+      max-width: 560px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+    }
+
+    .offer-eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--space-3);
+      display: block;
+    }
+
+    .offer-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 500;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-4);
+      line-height: 1.2;
+    }
+
+    .offer-intro {
+      font-family: var(--font-sub);
+      font-size: 1.05rem;
+      color: var(--color-text-secondary);
+      line-height: 1.65;
+      margin-bottom: var(--space-8);
+    }
+
+    .offer-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+
+    .offer-form .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .offer-form .form-label {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+    }
+
+    .offer-form .form-input,
+    .offer-form .form-textarea {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--color-text-primary);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-4);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .offer-form .form-input:focus,
+    .offer-form .form-textarea:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(184,84,106,0.12);
+    }
+
+    .offer-form .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* Reference field */
+    .ref-tabs {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: var(--space-3);
+    }
+    .ref-tab {
+      flex: 1;
+      padding: 0.5rem 1rem;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      background: var(--color-bg);
+      border: none;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+    .ref-tab.is-active {
+      background: var(--color-accent);
+      color: #fff;
+    }
+    .ref-panel { display: none; }
+    .ref-panel.is-active { display: block; }
+
+    /* File drop zone */
+    .file-drop {
+      position: relative;
+      border: 1.5px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem var(--space-4);
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+      background: var(--color-bg);
+    }
+    .file-drop:hover, .file-drop.is-over {
+      border-color: var(--color-accent);
+      background: rgba(184,84,106,0.04);
+    }
+    .file-drop input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .file-drop-icon {
+      color: var(--color-text-muted);
+      margin-bottom: 0.4rem;
+    }
+    .file-drop-text {
+      font-size: 0.88rem;
+      color: var(--color-text-secondary);
+      line-height: 1.4;
+    }
+    .file-drop-hint {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      margin-top: 0.25rem;
+    }
+    .file-chosen {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--color-text-primary);
+      margin-top: 0.5rem;
+    }
+    .file-chosen.is-visible { display: flex; }
+    .file-chosen-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-remove {
+      background: none;
+      border: none;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      padding: 0;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .file-remove:hover { color: var(--color-accent); }
+
+    .offer-submit {
+      margin-top: var(--space-4);
+    }
+
+    .offer-success {
+      display: none;
+      text-align: center;
+      padding: var(--space-8) 0 var(--space-4);
+    }
+
+    .offer-success-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(184,84,106,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-5);
+      color: var(--color-accent);
+    }
+
+    .offer-success h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-3);
+    }
+
+    .offer-success p {
+      font-family: var(--font-sub);
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      line-height: 1.65;
+      margin-bottom: var(--space-6);
+    }
+
+    @media (max-width: 600px) {
+      .offer-main {
+        padding: var(--space-10) var(--space-4) var(--space-10);
+      }
+      .offer-card {
+        padding: var(--space-8) var(--space-6);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap offer-page">
+
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <a href="index.html" class="header-logo" aria-label="Акварели Джульджи — главная">
+      <span class="logo-text">Акварели Джульджи</span>
+    </a>
+    <nav class="header-nav" aria-label="Навигация">
+      <a href="index.html#catalog-section" class="nav-link">Работы</a>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="offer-main" role="main">
+    <div class="offer-card">
+      <span class="offer-eyebrow">ваша идея</span>
+      <h1 class="offer-title">Предложить свою идею</h1>
+      <p class="offer-intro">Расскажите, что вы хотели бы видеть на картине — цветок, птица, пейзаж, что-то личное. Я напишу вам в Telegram, чтобы обсудить детали.</p>
+
+      <form class="offer-form" id="offer-form" novalidate>
+        <div class="form-field">
+          <label class="form-label" for="offer-name">Как вас зовут?</label>
+          <input class="form-input" type="text" id="offer-name" name="name" placeholder="Ваше имя" required autocomplete="given-name">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="offer-contact">Telegram или телефон</label>
+          <input class="form-input" type="text" id="offer-contact" name="contact" placeholder="@username или +7..." required>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="offer-idea">Ваша идея</label>
+          <textarea class="form-textarea" id="offer-idea" name="idea" placeholder="Опишите, что вы хотите изобразить — тему, настроение, размер, любые детали…" required></textarea>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Референс <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--color-text-muted)">(необязательно)</span></label>
+          <div class="ref-tabs" role="tablist">
+            <button type="button" class="ref-tab is-active" data-tab="link" role="tab" aria-selected="true">Ссылка</button>
+            <button type="button" class="ref-tab" data-tab="file" role="tab" aria-selected="false">Файл</button>
+          </div>
+
+          <div class="ref-panel is-active" id="ref-panel-link">
+            <input class="form-input" type="url" id="offer-ref-url" name="ref_url"
+              placeholder="Вставьте ссылку — Pinterest, Instagram, Google…">
+          </div>
+
+          <div class="ref-panel" id="ref-panel-file">
+            <div class="file-drop" id="file-drop">
+              <input type="file" id="offer-ref-file" name="ref_file" accept="image/*,.pdf"
+                aria-label="Прикрепить файл-референс">
+              <div class="file-drop-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+                </svg>
+              </div>
+              <div class="file-drop-text">Нажмите или перетащите файл сюда</div>
+              <div class="file-drop-hint">JPG, PNG, WEBP, PDF — до 10 МБ</div>
+            </div>
+            <div class="file-chosen" id="file-chosen">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/>
+              </svg>
+              <span class="file-chosen-name" id="file-chosen-name"></span>
+              <button type="button" class="file-remove" id="file-remove" aria-label="Удалить файл">×</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="offer-submit">
+          <button type="submit" class="btn-primary" style="width:100%; font-size:1rem; padding:1rem">
+            Отправить идею
+          </button>
+        </div>
+      </form>
+
+      <!-- SVG icon update for logo compatibility -->
+      <!-- Success state -->
+      <div class="offer-success" id="offer-success">
+        <div class="offer-success-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h2>Спасибо!</h2>
+        <p>Ваша идея получена. Я напишу вам в Telegram в ближайшее время.</p>
+        <a href="index.html" class="btn-primary" style="font-size:1rem; padding:0.875rem 2rem; display:inline-block; text-decoration:none">
+          Вернуться к работам
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-copy">© Акварели Джульджи</p>
+      <div class="footer-tg">
+        <a href="https://t.me/nasty_brouke" target="_blank" rel="noopener noreferrer" aria-label="Написать в Telegram">
+          Telegram: @nasty_brouke
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="politika-konfidencialnosti.html">Политика обработки персональных данных</a>
+      </div>
+      <p class="footer-credit">
+        <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+      </p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('offer-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = this;
+    const btn = form.querySelector('[type="submit"]');
+
+    // Simple validation
+    const name = document.getElementById('offer-name').value.trim();
+    const contact = document.getElementById('offer-contact').value.trim();
+    const idea = document.getElementById('offer-idea').value.trim();
+
+    if (!name || !contact || !idea) {
+      // Highlight empty fields
+      [['offer-name', name], ['offer-contact', contact], ['offer-idea', idea]].forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (!val) {
+          el.style.borderColor = 'var(--color-accent)';
+          el.focus();
+        }
+      });
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Отправляю…';
+
+    // Simulate submit (800ms)
+    setTimeout(function() {
+      form.style.display = 'none';
+      document.getElementById('offer-success').style.display = 'block';
+    }, 800);
+  });
+
+  // Clear error state on input
+  ['offer-name','offer-contact','offer-idea'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', function() {
+      this.style.borderColor = '';
+    });
+  });
+
+  // ── Reference tabs ──────────────────────────────
+  document.querySelectorAll('.ref-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.ref-tab').forEach(function(t) {
+        t.classList.remove('is-active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.ref-panel').forEach(function(p) {
+        p.classList.remove('is-active');
+      });
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById('ref-panel-' + tab.dataset.tab).classList.add('is-active');
+    });
+  });
+
+  // ── File drop zone ───────────────────────────────
+  var fileInput = document.getElementById('offer-ref-file');
+  var fileDrop  = document.getElementById('file-drop');
+  var fileChosen = document.getElementById('file-chosen');
+  var fileChosenName = document.getElementById('file-chosen-name');
+  var fileRemove = document.getElementById('file-remove');
+
+  function showFile(name) {
+    fileChosenName.textContent = name;
+    fileChosen.classList.add('is-visible');
+    fileDrop.style.display = 'none';
+  }
+  function clearFile() {
+    fileInput.value = '';
+    fileChosen.classList.remove('is-visible');
+    fileDrop.style.display = '';
+  }
+
+  fileInput.addEventListener('change', function() {
+    if (this.files && this.files[0]) showFile(this.files[0].name);
+  });
+  fileRemove.addEventListener('click', clearFile);
+
+  // Drag-and-drop highlight
+  fileDrop.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('is-over'); });
+  fileDrop.addEventListener('dragleave', function() { this.classList.remove('is-over'); });
+  fileDrop.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.classList.remove('is-over');
+    var dt = e.dataTransfer;
+    if (dt.files && dt.files[0]) {
+      fileInput.files = dt.files;
+      showFile(dt.files[0].name);
+    }
+  });
+</script>
+
+</body>
+</html>
