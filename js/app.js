@@ -26,6 +26,10 @@ const workModal         = document.getElementById('work-modal');
 const modalClose        = document.getElementById('modal-close');
 const modalCloseBtn     = document.getElementById('modal-close-btn');
 
+// Checkout fields
+const fieldPhone        = document.getElementById('field-phone');
+const fieldTelegram     = document.getElementById('field-telegram');
+
 // Checkout
 const checkoutOverlay   = document.getElementById('checkout-overlay');
 const checkoutDialog    = document.getElementById('checkout-dialog');
@@ -293,11 +297,19 @@ checkoutOverlay.addEventListener('click', closeCheckout);
 // ── Checkout Form Submit ──────────────────────
 checkoutForm.addEventListener('submit', e => {
   e.preventDefault();
-  const name = document.getElementById('field-name').value.trim();
-  const contact = document.getElementById('field-contact').value.trim();
-  if (!name || !contact) {
-    showToast('Пожалуйста, заполните имя и контакт', 'error');
-    return;
+  const name    = document.getElementById('field-name').value.trim();
+  const phone   = fieldPhone ? fieldPhone.value.trim() : '';
+  const tg      = fieldTelegram ? fieldTelegram.value.trim() : '';
+
+  if (!name) {
+    showToast('Пожалуйста, укажите имя', 'error'); return;
+  }
+  const phoneDigits = phone.replace(/\D/g, '');
+  if (phoneDigits.length < 11) {
+    showToast('Укажите полный номер телефона', 'error'); return;
+  }
+  if (!tg) {
+    showToast('Укажите ник в Telegram', 'error'); return;
   }
   closeCheckout();
   showPaymentScreen();
@@ -305,7 +317,6 @@ checkoutForm.addEventListener('submit', e => {
 
 // ── Payment Screen ────────────────────────────
 function showPaymentScreen() {
-  mainContent.classList.add('is-hidden');
   paymentScreen.classList.add('is-active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -348,7 +359,6 @@ backToCatalogBtn.addEventListener('click', e => {
   e.preventDefault();
   successScreen.classList.remove('is-active');
   paymentScreen.classList.remove('is-active');
-  mainContent.classList.remove('is-hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
@@ -362,6 +372,54 @@ if (aboutToggle && aboutExpand) {
   });
 }
 
+// ── Phone mask ───────────────────────────────
+function initPhoneMask() {
+  if (!fieldPhone) return;
+
+  fieldPhone.addEventListener('input', function() {
+    let val = this.value.replace(/\D/g, ''); // only digits
+    if (val.startsWith('8')) val = '7' + val.slice(1);
+    if (!val.startsWith('7')) val = '7' + val;
+    val = val.slice(0, 11);
+
+    let formatted = '+7';
+    if (val.length > 1) formatted += ' (' + val.slice(1, 4);
+    if (val.length >= 4) formatted += ') ' + val.slice(4, 7);
+    if (val.length >= 7) formatted += '-' + val.slice(7, 9);
+    if (val.length >= 9) formatted += '-' + val.slice(9, 11);
+
+    this.value = formatted;
+  });
+
+  fieldPhone.addEventListener('keydown', function(e) {
+    // Allow deleting back past +7
+    if (e.key === 'Backspace' && this.value === '+7') {
+      e.preventDefault();
+    }
+  });
+
+  fieldPhone.addEventListener('focus', function() {
+    if (!this.value) this.value = '+7 (';
+  });
+
+  fieldPhone.addEventListener('blur', function() {
+    if (this.value === '+7 (') this.value = '';
+  });
+}
+
+// ── Telegram @ strip ─────────────────────────
+function initTelegramField() {
+  if (!fieldTelegram) return;
+  fieldTelegram.addEventListener('input', function() {
+    // Remove any leading @ the user might type
+    this.value = this.value.replace(/^@+/, '');
+    // No spaces allowed
+    this.value = this.value.replace(/\s/g, '');
+  });
+}
+
 // ── Init ─────────────────────────────────────
 renderCatalog();
 updateCartUI();
+initPhoneMask();
+initTelegramField();
