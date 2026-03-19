@@ -788,6 +788,7 @@ ul, ol { list-style: none; }
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: var(--shadow-xl);
+  -webkit-overflow-scrolling: touch;
 }
 
 .checkout-title {
@@ -839,6 +840,36 @@ ul, ol { list-style: none; }
 }
 .form-input:focus { border-color: var(--color-accent); }
 .form-input::placeholder { color: var(--color-text-muted); }
+/* Larger tap targets on mobile */
+@media (max-width: 640px) {
+  .form-input {
+    font-size: 1rem; /* prevents iOS zoom on focus */
+    padding: 0.8rem 0.9rem;
+  }
+}
+
+/* Telegram @ prefix */
+.form-input-prefix-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.form-input-prefix {
+  position: absolute;
+  left: 0.9rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+  z-index: 1;
+}
+.form-input--prefixed {
+  padding-left: 1.8rem !important;
+}
+@media (max-width: 640px) {
+  .form-input--prefixed {
+    padding-left: 1.9rem !important;
+  }
+}
 
 /* Delivery options */
 .delivery-options { display: flex; flex-direction: column; gap: var(--space-3); }
@@ -1550,11 +1581,31 @@ ul, ol { list-style: none; }
 
 /* Checkout Dialog — мобиле снизу */
 @media (max-width: 640px) {
-  .checkout-overlay { align-items: flex-end !important; }
   .checkout-dialog {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .checkout-inner {
     border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
-    max-height: 90vh;
+    max-height: 92vh;
     width: 100%;
+    max-width: 100%;
+    padding: var(--space-5) var(--space-4) 0 !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .checkout-inner > form {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: var(--space-4);
+  }
+  .checkout-actions {
+    position: sticky;
+    bottom: 0;
+    background: var(--color-surface);
+    padding: var(--space-3) 0 var(--space-5);
+    border-top: 1px solid var(--color-border);
+    margin: 0;
   }
   .checkout-total-row {
     font-size: 1rem;

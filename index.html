@@ -363,12 +363,12 @@
         </div>
         <div class="form-field">
           <label class="form-label" for="field-phone">Телефон</label>
-          <input class="form-input" type="tel" id="field-phone" name="phone" placeholder="+7 (___) ___-__-__" required autocomplete="tel">
+          <input class="form-input" type="tel" id="field-phone" name="phone" placeholder="+7 (___) ___-__-__" required autocomplete="tel" inputmode="numeric">
 
           <label class="form-label" for="field-telegram">Telegram</label>
           <div class="form-input-prefix-wrap">
-            <span class="form-input-prefix">@</span>
-            <input class="form-input form-input--prefixed" type="text" id="field-telegram" name="telegram" placeholder="username" required autocomplete="off">
+            <span class="form-input-prefix" aria-hidden="true">@</span>
+            <input class="form-input form-input--prefixed" type="text" id="field-telegram" name="telegram" placeholder="username" required autocomplete="off" inputmode="text">
           </div>
         </div>
       </div>
